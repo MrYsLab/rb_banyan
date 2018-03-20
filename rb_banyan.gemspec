@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
                           requiring connection to a single Banyan backplane. In addition to the base class,
                           executables for rb_backplane and rb_monitor are installed on the executable
                           path.}
-  spec.homepage = "https://github.com/MrYsLab/rb_banyan."
+  spec.homepage = "https://github.com/MrYsLab/rb_banyan"
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
