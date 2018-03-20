@@ -33,6 +33,8 @@ rb_monitor
 
     $ gem install rb_banyan
 
+## banyan_base.rb API
+You can view the API [here](http://htmlpreview.github.com/?https://github.com/MrYsLab/rb_banyan/blob/master/docs/BanyanBase.html).
 
 ## A Simple Echo Server
 ```
