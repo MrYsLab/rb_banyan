@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/rb_banyan/banyan_base.rb'
+
+
+class RBMonitor < BanyanBase
+  def initialize(back_plane_ip_address: nil, subscriber_port: '43125', publisher_port: '43124',
+                 process_name: 'Monitor', loop_time: 0.1)
+
+    back_plane_ip_address = Socket.ip_address_list[1].ip_address if back_plane_ip_address.nil?
+
+    super(back_plane_ip_address: back_plane_ip_address, subscriber_port: subscriber_port, publisher_port: publisher_port,
+          process_name: process_name, loop_time: loop_time)
+
+    # allow time for zmq connections to complete
+    sleep(0.3)
+
+    set_subscriber_topic('')
+
+    # wait for messages to arrive
+    begin
+      receive_loop
+    rescue SystemExit, Interrupt
+      clean_up
+    end
+  end
+
+  def incoming_message_processing(topic, payload)
+    puts(topic, payload)
+    STDOUT.flush
+  end
+end
+
+options = {back_plane_ip_address: nil, publisher_port: '43124',
+           subscriber_port: '43125', process_name: 'Banyan Monitor',
+           loop_time: '0.001'}
+
+optparse = OptionParser.new do |opts|
+  opts.on('-b', '--b Backplane Ip Address', 'IP address of Backplane in use') do |back_plane_ip_address|
+    options[:back_plane_ip_address] = back_plane_ip_address
+  end
+
+  opts.on('-p', '--p PUBLISHER PORT', 'Publisher Port Number') do |publisher_port|
+    options[:publisher_port] = publisher_port
+  end
+
+  opts.on('-s', '--s SUBSCRIBER PORT', 'Subscriber Port Number') do |subscriber_port|
+    options[:subscriber_port] = subscriber_port
+  end
+
+  opts.on('-n', '--n Process Name', 'Name Of This Banyan Component') do |process_name|
+    options[:process_name] = process_name
+  end
+
+  opts.on('-t', '--t Loop Delay Time', 'Time In Seconds') do |loop_time|
+    options[:loop_time] = loop_time
+  end
+  opts.on('-h', '--help', 'Display this screen') do
+    puts opts
+    exit
+  end
+end
+
+begin
+  optparse.parse!
+end
+
+options[:loop_time] = options[:loop_time].to_f
+b = RBMonitor.new(back_plane_ip_address: options[:back_plane_ip_address],
+                      subscriber_port: options[:subscriber_port],
+                      publisher_port: options[:publisher_port],
+                      process_name: options[:process_name],
+                      loop_time: options[:loop_time])
+
+
