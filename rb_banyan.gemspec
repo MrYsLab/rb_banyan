@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency('ffi-rzmq', '~> 2.0')
   spec.add_runtime_dependency('msgpack', '~> 1.1')
 
-  spec.add_development_dependency "bundler", "~> 1.15"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "bundler", "~> 2.2.33"
+  spec.add_development_dependency "rake", "~> 12.3.3"
   spec.add_development_dependency "rspec", "~> 3.0"
 end
